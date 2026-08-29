@@ -21,15 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--qyr1+hz4#5p4wn@ka+aht6ox0etpv*cg@!pe0&)2n!f31%-ii'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure--qyr1+hz4#5p4wn@ka+aht6ox0etpv*cg@!pe0&)2n!f31%-ii')
 OLLAMA_HOST = "http://localhost:11434"
 OLLAMA_CHAT_MODEL = "llama3"
 OLLAMA_EMBED_MODEL = "nomic-embed-text"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -59,7 +59,11 @@ INSTALLED_APPS = [
     'contact',
 ]
 
-import dj_database_url
+try:
+    import dj_database_url
+    HAS_DJ_DATABASE_URL = True
+except ImportError:
+    HAS_DJ_DATABASE_URL = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -98,12 +102,20 @@ WSGI_APPLICATION = 'cc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'CC.db'}",
-        conn_max_age=600
-    )
-}
+if HAS_DJ_DATABASE_URL and os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=f"sqlite:///{BASE_DIR / 'CC.db'}",
+            conn_max_age=600
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'CC.db',
+        }
+    }
 
 
 # Password validation
