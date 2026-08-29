@@ -2,7 +2,7 @@
 
 Civic Companion is an advanced LegalTech platform built on Django 5.1.4. It provides structured access to Indian Laws with integrated AI assistance, semantic search, and document processing tools designed for professionals and citizens alike.
 
-## Key Features    
+## Key Features     
 
 ### 1. Security & Profiles
 - **Secure Authentication:** JWT-based APIs.
