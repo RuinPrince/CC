@@ -11,7 +11,5 @@ backend/venv/
 chroma_db/
 
 CC.db
-*.json
-list_tables.py
-check_pks.py
-filter_dump.py
+db_dump_*.json
+staticfiles/
