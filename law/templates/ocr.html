@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - Document OCR Reader{% endblock %}
+
+{% block content %}
+<header class="header">
+  <div class="container text-center mt-5">
+    <h1 class="display-4 fw-bold">Document OCR & AI Analyzer</h1>
+    <p class="lead">Upload FIRs, Court Orders, or Contracts to instantly extract text and summarize using AI.</p>
+  </div>
+</header>
+
+<main class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card p-4 shadow-sm border-0 bg-white">
+        <div class="ocr-dropzone p-5 text-center border border-primary rounded shadow-sm bg-light" id="dropzone" style="cursor: pointer; transition: all 0.3s ease;">
+          <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-3"></i>
+          <h5 class="fw-bold text-dark">Drag & drop your files here, or <span class="text-primary text-decoration-underline">Browse Files</span></h5>
+          <p class="text-muted small">Supports scanned PDFs, PNG, JPG, JPEG</p>
+          <input type="file" id="file-input" class="d-none" accept=".pdf,.png,.jpg,.jpeg">
+        </div>
+        
+        <div id="upload-status" class="mt-4 d-none p-3 bg-light rounded">
+          <div class="d-flex justify-content-between mb-1">
+            <small class="fw-bold text-primary" id="status-text">Processing document...</small>
+            <small class="fw-bold text-primary" id="progress-percent">0%</small>
+          </div>
+          <div class="progress" style="height: 10px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" id="upload-progress" role="progressbar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div id="ocr-results" class="mt-4 d-none">
+          <h4 class="border-bottom pb-2 text-primary"><i class="bi bi-file-earmark-text me-2"></i> Extracted Text</h4>
+          <textarea id="extracted-text-area" class="form-control shadow-sm border-primary-subtle" rows="8" readonly></textarea>
+          <button class="btn btn-outline-primary mt-3 shadow-sm" id="download-text-btn"><i class="bi bi-download me-2"></i> Download Text</button>
+
+          <h4 class="mt-5 border-bottom pb-2 text-success"><i class="bi bi-robot me-2"></i> AI Summary & Legal Explanation</h4>
+          <div id="ai-explanation" class="p-4 bg-light rounded text-dark shadow-sm border border-success-subtle lead" style="font-size: 1.1rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input');
+    const uploadStatus = document.getElementById('upload-status');
+    const progressBar = document.getElementById('upload-progress');
+    const progressPercent = document.getElementById('progress-percent');
+    const statusText = document.getElementById('status-text');
+    const ocrResults = document.getElementById('ocr-results');
+    const extArea = document.getElementById('extracted-text-area');
+    const aiExplain = document.getElementById('ai-explanation');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length) handleUpload(e.target.files[0]);
+    });
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('bg-primary-subtle');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove('bg-primary-subtle');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('bg-primary-subtle');
+      if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+    });
+
+    function updateProgress(percent, text) {
+      progressBar.style.width = `${percent}%`;
+      progressPercent.textContent = `${percent}%`;
+      statusText.textContent = text;
+    }
+
+    function handleUpload(file) {
+      uploadStatus.classList.remove('d-none');
+      ocrResults.classList.add('d-none');
+      updateProgress(20, 'Uploading file...');
+
+      const formData = new FormData();
+      formData.append('document', file);
+
+      setTimeout(() => updateProgress(50, 'Extracting text using AI...'), 500);
+
+      fetch('/api/ai/ocr/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': window.csrfToken
+        },
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        updateProgress(80, 'Analyzing legal contents with RAG AI...');
+        
+        if (data.error) throw new Error(data.error);
+
+        extArea.value = data.extracted_text;
+
+        const userToken = localStorage.getItem('hf_token') || '';
+        const queryText = `Summarize and explain the legal implications of this extracted document text: \n\n${data.extracted_text.substring(0, 1500)}`;
+
+        // Request AI explanation — backend tries Ollama then HF
+        return fetch('/api/ai/chat/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': window.csrfToken
+          },
+          body: JSON.stringify({ query: queryText, hf_token: userToken })
+        })
+        .then(res => res.json())
+        .then(aiData => {
+          if (aiData.error && userToken) {
+            // Client-side HF fallback
+            return fetch('https://router.huggingface.co/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${userToken}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                model: 'Qwen/Qwen2.5-72B-Instruct',
+                messages: [
+                  { role: 'system', content: 'You are a helpful Legal Assistant for Indian Law. Summarize the text.' },
+                  { role: 'user', content: queryText }
+                ],
+                max_tokens: 500
+              })
+            })
+            .then(res => {
+              if (!res.ok) throw new Error('Hugging Face Cloud API Failed');
+              return res.json();
+            })
+            .then(hfData => ({ answer: hfData.choices[0].message.content }));
+          }
+          return aiData;
+        });
+      })
+      .then(data => {
+        updateProgress(100, 'Complete!');
+        setTimeout(() => {
+          uploadStatus.classList.add('d-none');
+          ocrResults.classList.remove('d-none');
+          if (data.error) {
+            aiExplain.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-triangle-fill"></i> API Error: ${data.error}</span>`;
+          } else {
+            aiExplain.innerHTML = data.answer || 'Could not parse AI explanation.';
+          }
+          showToast('Document processed successfully!');
+        }, 500);
+      })
+      .catch(err => {
+        uploadStatus.classList.add('d-none');
+        showToast(err.message || 'Failed to process document', true);
+      });
+    }
+
+    document.getElementById('download-text-btn').addEventListener('click', () => {
+      const text = extArea.value;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'extracted_text.txt';
+      a.click();
+    });
+  });
+</script>
+{% endblock %}

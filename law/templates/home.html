@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - Premium Legal Intelligence{% endblock %}
+
+{% block content %}
+<!-- Premium Hero Section -->
+<section class="position-relative overflow-hidden bg-dark text-white py-5" style="background: linear-gradient(135deg, var(--secondary-color) 0%, #1e1b4b 100%);">
+  <!-- Abstract Background Elements -->
+  <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden opacity-25" style="pointer-events: none;">
+    <div class="position-absolute rounded-circle" style="width: 600px; height: 600px; background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%); top: -200px; right: -100px;"></div>
+    <div class="position-absolute rounded-circle" style="width: 400px; height: 400px; background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%); bottom: -100px; left: -100px;"></div>
+  </div>
+
+  <div class="container position-relative z-index-1 py-5 animate-fade-in">
+    <div class="row justify-content-center text-center">
+      <div class="col-xl-8 col-lg-10">
+        <span class="badge bg-primary bg-opacity-25 text-white border border-primary px-3 py-2 rounded-pill mb-4 shadow-sm">
+          <i class="bi bi-stars me-1 text-warning"></i> Now featuring AI-Powered Legal Analysis
+        </span>
+        <h1 class="display-3 fw-bold mb-4 text-white letter-spacing-tight">
+          Navigate Indian Law with <span class="text-info">Clarity</span>
+        </h1>
+        <p class="lead text-white-50 mb-5 fw-light" style="font-size: 1.25rem;">
+          Your intelligent LegalTech co-pilot. Search amendments, explore human rights, and summarize dense legal texts in seconds.
+        </p>
+        
+        <!-- Elevated Search Bar -->
+        <div class="search-container position-relative mx-auto bg-white rounded-pill shadow-lg animate-fade-in animate-delay-1" style="max-width: 800px; border: 4px solid rgba(255,255,255,0.1);">
+          <i class="bi bi-search search-icon-premium fs-4"></i>
+          <input type="text" placeholder="Search laws, sections, or keywords (e.g., 'Punishment for theft')" class="form-control form-control-lg border-0 search-input-premium w-100 bg-transparent text-dark" id="smart-search-input" />
+          <button class="btn btn-primary rounded-pill position-absolute end-0 top-50 translate-middle-y me-2 px-4 shadow-sm fw-medium d-none d-sm-block">
+            Search
+          </button>
+          
+          <!-- Autocomplete Dropdown -->
+          <div class="dropdown-menu w-100 p-2 text-dark shadow-lg border-0 mt-3 rounded-4 animate-fade-in" id="search-autocomplete-dropdown" style="display:none; max-height:400px; overflow-y:auto; z-index:10000; position: absolute; top: 100%;">
+            <div class="px-3 py-2 border-bottom">
+              <small class="text-muted fw-bold text-uppercase letter-spacing-wide">Suggested Searches</small>
+            </div>
+            <!-- Dynamic Content Injected Here -->
+          </div>
+        </div>
+
+        <div class="mt-4 text-white-50 small animate-fade-in animate-delay-2">
+          Popular: <a href="#" class="text-info text-decoration-none me-3">BNS Section 302</a> <a href="#" class="text-info text-decoration-none me-3">Cybercrime</a> <a href="#" class="text-info text-decoration-none">Motor Vehicles Act</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Grid Section -->
+<section class="py-5 bg-light">
+  <div class="container py-5">
+    <div class="text-center mb-5 animate-fade-in">
+      <h2 class="fw-bold mb-3">Professional Legal Tools</h2>
+      <p class="text-muted lead">Everything you need to research, analyze, and manage legal documents.</p>
+    </div>
+    
+    <div class="row g-4 justify-content-center">
+      <!-- Indian Laws Card -->
+      <div class="col-lg-4 col-md-6 animate-fade-in animate-delay-1">
+        <a href="{% url 'category' %}" class="text-decoration-none">
+          <div class="card-premium">
+            <div class="position-relative">
+              <img src="{% static 'images/laws.jpg' %}" alt="Indian Laws" class="card-premium-img-top">
+              <div class="position-absolute top-0 end-0 m-3">
+                <span class="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2"><i class="bi bi-book-half text-primary me-1"></i> Core</span>
+              </div>
+            </div>
+            <div class="card-premium-body">
+              <h4 class="fw-bold mb-2 text-dark">Indian Laws</h4>
+              <p class="text-muted mb-0 flex-grow-1">Explore the comprehensive legal framework of India across various categories.</p>
+              <div class="mt-4 text-primary fw-medium d-flex align-items-center">
+                Explore <i class="bi bi-arrow-right ms-2 transition-transform"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Human Rights Card -->
+      <div class="col-lg-4 col-md-6 animate-fade-in animate-delay-2">
+        <a href="{% url 'right:rights_list' %}" class="text-decoration-none">
+          <div class="card-premium">
+            <div class="position-relative">
+              <img src="{% static 'images/rights.webp' %}" alt="Human Rights" class="card-premium-img-top">
+              <div class="position-absolute top-0 end-0 m-3">
+                <span class="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2"><i class="bi bi-shield-check text-success me-1"></i> Rights</span>
+              </div>
+            </div>
+            <div class="card-premium-body">
+              <h4 class="fw-bold mb-2 text-dark">Human Rights</h4>
+              <p class="text-muted mb-0 flex-grow-1">Understand your fundamental rights and constitutional protections.</p>
+              <div class="mt-4 text-primary fw-medium d-flex align-items-center">
+                Discover <i class="bi bi-arrow-right ms-2 transition-transform"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+      <!-- AI OCR Analyzer Card -->
+      <div class="col-lg-4 col-md-6 animate-fade-in animate-delay-3">
+        <a href="{% url 'ocr' %}" class="text-decoration-none">
+          <div class="card-premium" style="border: 2px solid transparent; background: linear-gradient(var(--bg-card), var(--bg-card)) padding-box, linear-gradient(135deg, var(--primary-color), var(--accent-color)) border-box;">
+            <div class="position-relative">
+              <img src="{% static 'images/government.jpg' %}" alt="AI Analyzer" class="card-premium-img-top">
+              <div class="position-absolute top-0 end-0 m-3">
+                <span class="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2"><i class="bi bi-cpu text-info me-1"></i> AI Powered</span>
+              </div>
+            </div>
+            <div class="card-premium-body">
+              <h4 class="fw-bold mb-2 text-dark">AI Analyzer</h4>
+              <p class="text-muted mb-0 flex-grow-1">Upload complex legal documents and let AI extract and summarize the contents instantly.</p>
+              <div class="mt-4 text-primary fw-medium d-flex align-items-center">
+                Try Now <i class="bi bi-arrow-right ms-2 transition-transform"></i>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- Content Sections -->
+<section class="py-5 bg-white border-top border-bottom border-light">
+  <div class="container py-4">
+    <div class="row align-items-center gx-5">
+      <div class="col-lg-6 mb-5 mb-lg-0 animate-fade-in">
+        <div class="p-3 bg-light rounded-circle d-inline-block mb-3">
+          <i class="bi bi-bank2 fs-2 text-primary"></i>
+        </div>
+        <h2 class="fw-bold mb-3">Ensuring Justice and Order</h2>
+        <p class="lead text-muted mb-4">Indian law is a comprehensive legal system that upholds justice, safeguards rights, and maintains social harmony.</p>
+        <p class="text-muted">It covers <strong>criminal, civil, corporate, and administrative laws</strong>, ensuring fairness and accountability. With continuous reforms, it integrates digital advancements, stricter enforcement, and faster legal processes for greater transparency and efficiency.</p>
+      </div>
+      <div class="col-lg-6 animate-fade-in animate-delay-1">
+        <div class="p-4 bg-light rounded-4 shadow-sm border border-light">
+          <div class="d-flex align-items-start mb-4">
+            <i class="bi bi-check-circle-fill text-success fs-4 me-3 mt-1"></i>
+            <div>
+              <h5 class="fw-bold mb-1">Comprehensive Database</h5>
+              <p class="text-muted mb-0">Access thousands of acts and sections instantly.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start mb-4">
+            <i class="bi bi-check-circle-fill text-success fs-4 me-3 mt-1"></i>
+            <div>
+              <h5 class="fw-bold mb-1">AI Simplification</h5>
+              <p class="text-muted mb-0">Translate complex legal jargon into plain English.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-start">
+            <i class="bi bi-check-circle-fill text-success fs-4 me-3 mt-1"></i>
+            <div>
+              <h5 class="fw-bold mb-1">Personal Organization</h5>
+              <p class="text-muted mb-0">Bookmark sections and write private annotations securely.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 bg-light" id="Contact">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6 text-center animate-fade-in">
+        <h2 class="fw-bold mb-3">Get in Touch</h2>
+        <p class="text-muted mb-5">Have questions about our API or platform? Our team is here to help.</p>
+        
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 text-start">
+          <form class="contact-form">
+            <div class="mb-3">
+              <label class="form-label fw-medium text-dark">Full Name</label>
+              <input type="text" class="form-control form-control-lg bg-light border-0" placeholder="Jane Doe" required />
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-medium text-dark">Email Address</label>
+              <input type="email" class="form-control form-control-lg bg-light border-0" placeholder="jane@example.com" required />
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-medium text-dark">Message</label>
+              <textarea class="form-control form-control-lg bg-light border-0" rows="4" placeholder="How can we help you?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - Admin Insights{% endblock %}
+
+{% block content %}
+<div class="bg-dark text-white py-5 mb-5" style="background: linear-gradient(135deg, #dc3545 0%, #1e1b4b 100%);">
+  <div class="container text-center py-4 animate-fade-in">
+    <h1 class="display-5 fw-bold mb-3">System & Audit Insights</h1>
+    <p class="lead text-white-50 fw-light mb-0">Real-time charts, law popularity statistics, and AI model usage metrics.</p>
+  </div>
+</div>
+
+<div class="container mb-5">
+  <div class="row g-4">
+    <!-- Chart 1: Law Popularity -->
+    <div class="col-md-6 animate-fade-in animate-delay-1">
+      <div class="card-premium p-4 border-0 shadow-sm bg-white">
+        <h5 class="fw-bold mb-3"><i class="bi bi-hammer text-primary me-2"></i> Law Sections Popularity</h5>
+        <canvas id="lawsChart" class="mt-3" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 2: AI Queries Usage -->
+    <div class="col-md-6 animate-fade-in animate-delay-2">
+      <div class="card-premium p-4 border-0 shadow-sm bg-white">
+        <h5 class="fw-bold mb-3"><i class="bi bi-cpu text-success me-2"></i> Monthly AI RAG Queries</h5>
+        <canvas id="aiChart" class="mt-3" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Init Laws Popularity Chart
+    const ctxLaws = document.getElementById('lawsChart').getContext('2d');
+    new Chart(ctxLaws, {
+      type: 'bar',
+      data: {
+        labels: ['BNS Sec 302', 'IT Act Sec 66', 'Child Marriage Sec 3', 'Motor Vehicles Sec 184'],
+        datasets: [{
+          label: 'Views (Hits)',
+          data: [350, 240, 180, 420],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Init AI Query Volume Chart
+    const ctxAI = document.getElementById('aiChart').getContext('2d');
+    new Chart(ctxAI, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'AI Chat Requests',
+          data: [120, 190, 300, 500, 600, 750],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 2,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  });
+</script>
+{% endblock %}

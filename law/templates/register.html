@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - Get Started{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center py-5" style="min-height: calc(100vh - 200px);">
+  <div class="col-12 col-md-8 col-lg-5">
+    <div class="card-premium p-4 p-md-5 border-0 shadow-lg bg-white">
+      <div class="text-center mb-4">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" width="60" height="60" class="rounded shadow-sm mb-3">
+        <h2 class="fw-bold text-dark m-0">Create Account</h2>
+        <p class="text-muted small">Join premium LegalTech intelligence platform</p>
+      </div>
+
+      {% if error_msg %}
+        <div class="alert alert-danger border-0 rounded-3 shadow-sm d-flex align-items-center gap-2 mb-4" role="alert">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div>{{ error_msg }}</div>
+        </div>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Django forms default usercreation form fields -->
+        {% for field in form %}
+          <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label fw-medium text-dark">{{ field.label }}</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                {% if "password" in field.name %}
+                  <i class="bi bi-shield-lock text-muted"></i>
+                {% else %}
+                  <i class="bi bi-person text-muted"></i>
+                {% endif %}
+              </span>
+              <input type="{% if 'password' in field.name %}password{% else %}text{% endif %}" 
+                     name="{{ field.name }}" 
+                     required 
+                     id="{{ field.id_for_label }}" 
+                     class="form-control bg-light border-0 py-2.5 shadow-none" 
+                     placeholder="Enter your {{ field.label|lower }}">
+            </div>
+            {% if field.help_text %}
+              <div class="form-text text-muted" style="font-size: 0.75rem;">{{ field.help_text|safe }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary w-100 py-2.5 rounded-pill shadow-sm fw-medium transition-transform hover-scale mt-3">
+          Get Started
+        </button>
+      </form>
+
+      <div class="text-center mt-4 pt-3 border-top">
+        <p class="text-muted small mb-0">Already have an account? <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .py-2\.5 {
+    padding-top: 0.65rem !important;
+    padding-bottom: 0.65rem !important;
+  }
+  .input-group-text {
+    border-radius: 8px 0 0 8px !important;
+  }
+  .form-control {
+    border-radius: 0 8px 8px 0 !important;
+  }
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+  .transition-transform {
+    transition: transform 0.2s ease-in-out;
+  }
+</style>
+{% endblock %}

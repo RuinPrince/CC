@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - Sections{% endblock %}
+
+{% block content %}
+<div class="bg-dark text-white py-5 mb-5" style="background: linear-gradient(135deg, var(--secondary-color) 0%, #1e1b4b 100%);">
+  <div class="container py-4 animate-fade-in text-center">
+    <nav aria-label="breadcrumb" class="d-inline-block mb-3">
+      <ol class="breadcrumb mb-0 bg-transparent p-0 justify-content-center">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'right:rights_list' %}" class="text-white-50 text-decoration-none">Rights</a></li>
+        <li class="breadcrumb-item active text-white" aria-current="page">Sections</li>
+      </ol>
+    </nav>
+    {% for n in act %}
+    <h1 class="display-6 fw-bold mb-2">{{ n.name }}</h1>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="container mb-5">
+  <div class="row g-4" id="laws-grid">
+    {% for chap in data %}
+    <div class="col-xl-4 col-md-6 animate-fade-in animate-delay-1">
+      <a href="/rights/{{ tn }}/section/{{ chap.section }}" class="text-decoration-none h-100 d-block">
+        <div class="card-premium p-4 border-start border-4 border-info shadow-sm hover-elevate bg-white">
+          <div class="d-flex align-items-center mb-3">
+            <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+              <i class="bi bi-file-earmark-text-fill fs-5"></i>
+            </div>
+            <h4 class="fw-bold text-dark m-0">Section {{ chap.section }}</h4>
+          </div>
+          {% if chap.title %}
+          <p class="text-muted m-0 fs-6 fw-medium line-clamp-3">{{ chap.title }}</p>
+          {% else %}
+          <p class="text-muted m-0 fs-6 fw-light font-monospace text-uppercase">Legal Reference {{ chap.section }}</p>
+          {% endif %}
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="card-premium p-5 text-center bg-light border-0">
+        <i class="bi bi-file-earmark-x display-1 text-muted mb-3 opacity-50"></i>
+        <h3 class="fw-bold text-dark mb-2">No sections available.</h3>
+        <p class="text-muted">There are currently no sections filed under this right.</p>
+        <a href="{% url 'right:rights_list' %}" class="btn btn-outline-primary mt-3">Return to Rights</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid pt-4 px-lg-5 mb-5">
+  <div class="row g-4">
+    <!-- Sidebar Navigation -->
+    <div class="col-lg-3 animate-fade-in">
+      <div class="card-premium p-4 border-0 shadow-sm sticky-sidebar">
+        <div class="d-flex align-items-center gap-3 mb-4 border-bottom pb-4">
+          <img src="https://ui-avatars.com/api/?name=User&background=4f46e5&color=fff" alt="User" class="rounded-circle shadow-sm" width="50" height="50">
+          <div>
+            <h5 class="fw-bold m-0" id="dash-username">Guest User</h5>
+            <small class="text-muted">Pro Plan Member</small>
+          </div>
+        </div>
+        
+        <div class="nav flex-column nav-pills gap-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active d-flex align-items-center gap-3 py-3 rounded-3" href="{% url 'dashboard' %}">
+            <i class="bi bi-speedometer2 fs-5"></i> <span class="fw-medium">Overview</span>
+          </a>
+          <a class="nav-link text-dark d-flex align-items-center gap-3 py-3 rounded-3 hover-bg-light" href="{% url 'web_profile' %}">
+            <i class="bi bi-person fs-5"></i> <span class="fw-medium">My Profile</span>
+          </a>
+          <a class="nav-link text-dark d-flex align-items-center gap-3 py-3 rounded-3 hover-bg-light" href="{% url 'bookmarks' %}">
+            <i class="bi bi-bookmark fs-5"></i> <span class="fw-medium">Saved Bookmarks</span>
+          </a>
+          <a class="nav-link text-dark d-flex align-items-center gap-3 py-3 rounded-3 hover-bg-light" href="{% url 'ocr' %}">
+            <i class="bi bi-cpu fs-5"></i> <span class="fw-medium">AI Analyzer</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Area -->
+    <div class="col-lg-9 animate-fade-in animate-delay-1">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="fw-bold mb-1">Dashboard Overview</h2>
+          <p class="text-muted m-0">Welcome back! Here's what's happening with your account today.</p>
+        </div>
+        <button class="btn btn-outline-primary d-none d-md-block"><i class="bi bi-download me-2"></i> Export Report</button>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card-premium p-4 border-0 shadow-sm bg-white border-start border-4 border-primary">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h6 class="text-muted text-uppercase letter-spacing-wide mb-1">Total Searches</h6>
+                <h2 class="fw-bold m-0" id="stat-searches">42</h2>
+              </div>
+              <div class="bg-primary-subtle text-primary p-2 rounded"><i class="bi bi-search fs-5"></i></div>
+            </div>
+            <small class="text-success fw-medium"><i class="bi bi-arrow-up-right"></i> 12% from last week</small>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card-premium p-4 border-0 shadow-sm bg-white border-start border-4 border-success">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h6 class="text-muted text-uppercase letter-spacing-wide mb-1">Saved Bookmarks</h6>
+                <h2 class="fw-bold m-0" id="stat-bookmarks">0</h2>
+              </div>
+              <div class="bg-success bg-opacity-10 text-success p-2 rounded"><i class="bi bi-bookmark-fill fs-5"></i></div>
+            </div>
+            <small class="text-success fw-medium"><i class="bi bi-arrow-up-right"></i> Active Folders: <span id="stat-folders">0</span></small>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card-premium p-4 border-0 shadow-sm bg-white border-start border-4 border-warning">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h6 class="text-muted text-uppercase letter-spacing-wide mb-1">Personal Notes</h6>
+                <h2 class="fw-bold m-0" id="stat-notes">0</h2>
+              </div>
+              <div class="bg-warning bg-opacity-10 text-warning p-2 rounded"><i class="bi bi-journal-text fs-5"></i></div>
+            </div>
+            <small class="text-muted fw-medium">Across all acts</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Recent Activity Table -->
+        <div class="col-xl-8">
+          <div class="card-premium border-0 shadow-sm bg-white">
+            <div class="d-flex justify-content-between align-items-center p-4 border-bottom">
+              <h5 class="fw-bold m-0">Recent Activity</h5>
+              <a href="#" class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="event.preventDefault(); showToast('Export feature coming soon!');">View All</a>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                  <tr>
+                    <th class="ps-4 fw-medium border-0 py-3">Action</th>
+                    <th class="fw-medium border-0 py-3">Details</th>
+                    <th class="fw-medium border-0 py-3">Date</th>
+                    <th class="pe-4 fw-medium border-0 py-3 text-end">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-actions-table">
+                  <!-- Empty State -->
+                  <tr>
+                    <td colspan="4" class="text-center py-5 text-muted">
+                      <i class="bi bi-inbox fs-2 mb-2 d-block opacity-50"></i>
+                      No recent activity detected.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Utilities -->
+        <div class="col-xl-4">
+          <div class="card-premium p-4 border-0 shadow-sm bg-white">
+            <h5 class="fw-bold mb-4">Quick Tools</h5>
+            <div class="d-grid gap-3">
+              <a href="{% url 'ocr' %}" class="btn btn-light text-start py-3 px-4 rounded-3 d-flex align-items-center gap-3 border transition-transform hover-border-primary">
+                <i class="bi bi-filetype-pdf fs-4 text-primary"></i>
+                <div>
+                  <h6 class="m-0 fw-bold">Analyze PDF</h6>
+                  <small class="text-muted">Use AI OCR</small>
+                </div>
+              </a>
+              <a href="{% url 'bookmarks' %}" class="btn btn-light text-start py-3 px-4 rounded-3 d-flex align-items-center gap-3 border transition-transform hover-border-success">
+                <i class="bi bi-folder-fill fs-4 text-success"></i>
+                <div>
+                  <h6 class="m-0 fw-bold">Manage Folders</h6>
+                  <small class="text-muted">Organize bookmarks</small>
+                </div>
+              </a>
+              <a href="{% url 'category' %}" class="btn btn-light text-start py-3 px-4 rounded-3 d-flex align-items-center gap-3 border transition-transform hover-border-warning">
+                <i class="bi bi-journal-text fs-4 text-warning"></i>
+                <div>
+                  <h6 class="m-0 fw-bold">Explore Laws</h6>
+                  <small class="text-muted">Browse acts and sections</small>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Load statistics
+    Promise.all([
+      fetch('/api/bookmarks/items/', { headers: { 'X-CSRFToken': window.csrfToken }}).then(res => res.json()),
+      fetch('/api/bookmarks/folders/', { headers: { 'X-CSRFToken': window.csrfToken }}).then(res => res.json()),
+      fetch('/api/notes/items/', { headers: { 'X-CSRFToken': window.csrfToken }}).then(res => res.json()),
+      fetch('/api/users/profile/', { headers: { 'X-CSRFToken': window.csrfToken }}).then(res => res.json())
+    ])
+    .then(([bookmarks, folders, notes, profile]) => {
+      document.getElementById('stat-bookmarks').textContent = Array.isArray(bookmarks) ? bookmarks.length : 0;
+      document.getElementById('stat-folders').textContent = Array.isArray(folders) ? folders.length : 0;
+      document.getElementById('stat-notes').textContent = Array.isArray(notes) ? notes.length : 0;
+      if (profile && profile.username) {
+        document.getElementById('dash-username').textContent = profile.username;
+      }
+    })
+    .catch(() => {});
+  });
+</script>
+<style>
+  .hover-bg-light:hover { background-color: #f8fafc; }
+  .hover-border-primary:hover { border-color: var(--primary-color) !important; transform: translateY(-2px); }
+  .hover-border-success:hover { border-color: #10b981 !important; transform: translateY(-2px); }
+  .hover-border-warning:hover { border-color: #f59e0b !important; transform: translateY(-2px); }
+  .transition-transform { transition: transform 0.2s, border-color 0.2s; }
+</style>
+{% endblock %}

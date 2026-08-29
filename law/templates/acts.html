@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Civic Companion - {{ tname }} Laws{% endblock %}
+
+{% block content %}
+<div class="bg-dark text-white py-5 mb-5" style="background: linear-gradient(135deg, var(--secondary-color) 0%, #1e1b4b 100%);">
+  <div class="container py-4 animate-fade-in text-center">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="d-inline-block mb-3">
+      <ol class="breadcrumb mb-0 bg-transparent p-0 justify-content-center">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'category' %}" class="text-white-50 text-decoration-none">Categories</a></li>
+        <li class="breadcrumb-item active text-white" aria-current="page">{{ tname }}</li>
+      </ol>
+    </nav>
+    <h1 class="display-5 fw-bold mb-0">{{ tname }} Laws</h1>
+  </div>
+</div>
+
+<div class="container mb-5">
+  <div class="row g-4" id="criminals-grid">
+    {% for i in data %}
+    <div class="col-xl-3 col-lg-4 col-md-6 animate-fade-in animate-delay-1">
+      <a href="/categories/{{ i.category }}/act/{{ i.tname }}/chapter_list/" class="text-decoration-none h-100 d-block">
+        <div class="card-premium text-center">
+          <img src="{% static 'images/' %}{{ i.tname }}.jpeg" alt="{{ i.name }}" class="card-premium-img-top" onerror="this.onerror=null; this.src='/static/images/laws.jpg';" />
+          <div class="card-premium-body d-flex align-items-center justify-content-center">
+            <h5 class="fw-bold text-dark m-0" style="line-height: 1.4;">{{ i.name }}</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="card-premium p-5 text-center bg-light border-0">
+        <i class="bi bi-journal-x display-1 text-muted mb-3 opacity-50"></i>
+        <h3 class="fw-bold text-dark mb-2">No acts available.</h3>
+        <p class="text-muted">There are currently no acts filed under this category.</p>
+        <a href="{% url 'category' %}" class="btn btn-outline-primary mt-3">Return to Categories</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
