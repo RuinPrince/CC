@@ -106,7 +106,8 @@ if HAS_DJ_DATABASE_URL and os.environ.get('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
             default=f"sqlite:///{BASE_DIR / 'CC.db'}",
-            conn_max_age=600
+            conn_max_age=0,
+            ssl_require=True
         )
     }
 else:

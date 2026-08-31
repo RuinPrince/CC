@@ -32,7 +32,10 @@
   <body class="d-flex flex-column min-vh-100">
     <!-- Setup CSRF Token for JavaScript -->
     <script>
-      window.csrfToken = '{{ csrf_token }}';
+      // Django's csrf_token tag outputs an HTML input element, we need to extract its value
+      const csrfForm = document.createElement('div');
+      csrfForm.innerHTML = `{% csrf_token %}`;
+      window.csrfToken = csrfForm.querySelector('input').value;
     </script>
 
     <!-- Navigation Bar -->
