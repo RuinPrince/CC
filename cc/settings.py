@@ -102,10 +102,11 @@ WSGI_APPLICATION = 'cc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if HAS_DJ_DATABASE_URL and os.environ.get('DATABASE_URL'):
+db_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
+if HAS_DJ_DATABASE_URL and db_url:
     DATABASES = {
         'default': dj_database_url.config(
-            default=f"sqlite:///{BASE_DIR / 'CC.db'}",
+            default=db_url,
             conn_max_age=0,
             ssl_require=True
         )
