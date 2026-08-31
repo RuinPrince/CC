@@ -102,7 +102,7 @@ class AIChatView(APIView):
 
     def post(self, request):
         query = request.data.get('query')
-        hf_token = request.data.get('hf_token', '')
+        hf_token = request.data.get('hf_token') or os.environ.get('HF_TOKEN') or os.environ.get('HUGGING_FACE_API_KEY') or ''
         if not query:
             return Response({"error": "Query is required"}, status=400)
         
