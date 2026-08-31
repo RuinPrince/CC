@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         botMsg.className = 'chat-message bot animate-fade-in border-warning border';
         botMsg.innerHTML = renderMarkdown(
-          "⚠️ **AI is currently offline.**\n\nTo chat via Hugging Face Cloud (100% Free):\n1. Click the **Gear icon ⚙️** at the top of this window.\n2. Paste your free **Hugging Face API Token** (you can create one in 1 minute on [huggingface.co](https://huggingface.co/settings/tokens) without credit cards).\n3. Save and try again!"
+          "⚠️ **AI is currently offline.**\n\nI apologize, but the server is currently unable to process requests."
         );
       } else {
         botMsg.className = 'chat-message bot animate-fade-in';
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const botMsg = document.createElement('div');
       botMsg.className = 'chat-message bot animate-fade-in border-warning border';
       botMsg.innerHTML = renderMarkdown(
-        "⚠️ **Could not connect to the server.**\n\nTo chat via Hugging Face Cloud (100% Free):\n1. Click the **Gear icon ⚙️** at the top of this window.\n2. Paste your free **Hugging Face API Token**.\n3. Save and try again!"
+        "⚠️ **Could not connect to the server.**\n\nPlease check your internet connection and try again."
       );
       chatMessages.appendChild(botMsg);
       chatMessages.scrollTop = chatMessages.scrollHeight;
