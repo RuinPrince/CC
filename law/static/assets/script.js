@@ -80,17 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <small class="text-white-50">Your intelligent legal assistant</small>
       </div>
       <div class="d-flex gap-2">
-        <button class="btn btn-link text-white p-0 shadow-none" id="toggle-chat-settings" title="AI Settings"><i class="bi bi-gear-fill fs-5"></i></button>
         <button class="btn btn-link text-white p-0 shadow-none" id="close-chat"><i class="bi bi-x-lg fs-5"></i></button>
       </div>
-    </div>
-    <div class="bg-light p-3 border-bottom d-none text-dark" id="chat-settings-panel">
-      <label class="form-label small fw-bold text-muted mb-1" style="font-size: 0.75rem;">HUGGING FACE API TOKEN (100% Free)</label>
-      <div class="input-group input-group-sm">
-        <input type="password" id="hf-token-input" class="form-control" placeholder="Paste hf_token here...">
-        <button class="btn btn-primary btn-sm" id="save-hf-token">Save</button>
-      </div>
-      <small class="text-muted d-block mt-1" style="font-size: 0.7rem; line-height: 1;">Create a free account on huggingface.co to get a token. No credit cards needed!</small>
     </div>
     <div class="chat-body" id="chat-messages-container">
       <div class="chat-message bot">
@@ -120,26 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chatWindow.style.display = 'none';
   });
 
-  // Settings Panel Logic
-  const settingsBtn = document.getElementById('toggle-chat-settings');
-  const settingsPanel = document.getElementById('chat-settings-panel');
-  const tokenInput = document.getElementById('hf-token-input');
-  const saveTokenBtn = document.getElementById('save-hf-token');
 
-  // Load saved token on load
-  const savedToken = localStorage.getItem('hf_token') || '';
-  tokenInput.value = savedToken;
-
-  settingsBtn.addEventListener('click', () => {
-    settingsPanel.classList.toggle('d-none');
-  });
-
-  saveTokenBtn.addEventListener('click', () => {
-    const token = tokenInput.value.trim();
-    localStorage.setItem('hf_token', token);
-    showToast(token ? 'Hugging Face API token saved!' : 'Token cleared.');
-    settingsPanel.classList.add('d-none');
-  });
 
   const chatInput = document.getElementById('chat-input');
   const chatSend = document.getElementById('chat-send');
