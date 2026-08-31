@@ -27,7 +27,7 @@ OLLAMA_CHAT_MODEL = "llama3"
 OLLAMA_EMBED_MODEL = "nomic-embed-text"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
