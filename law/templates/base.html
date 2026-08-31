@@ -114,8 +114,10 @@
     </nav>
 
     <!-- Main Content Area -->
+    {% block top_spacer %}
     <div id="top" style="height: 70px;"></div> <!-- Spacer for fixed navbar -->
-    <main class="flex-grow-1 bg-light pt-4 pb-5">
+    {% endblock %}
+    <main class="flex-grow-1 bg-light {% block main_padding %}pt-4{% endblock %} pb-5">
       {% block content %}
       {% endblock %}
     </main>
