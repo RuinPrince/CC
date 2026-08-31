@@ -27,7 +27,7 @@ OLLAMA_CHAT_MODEL = "llama3"
 OLLAMA_EMBED_MODEL = "nomic-embed-text"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
